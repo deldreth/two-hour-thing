@@ -9,40 +9,57 @@ import { Book as BookType } from 'app/types';
 export interface Props {
   book: BookType;
   open: boolean;
+  onCheckout: () => void;
 }
 
-export interface State {
-  open: boolean;
-  animating: boolean;
-}
-
-export default class Book extends React.Component<Props, State> {
-  constructor ( props: Props ) {
-    super( props );
-
-    this.state = {
-      open: false,
-      animating: false,
-    };
+export default class Book extends React.Component<Props> {
+  checkoutHandler = () => {
+    this.props.onCheckout();
   }
 
-  // componentDidUpdate ( prevProps: Props ) {
-  //   if ( this.props.open !== prevProps.open ) {
-  //     this.setState( { animating: true }, () => {
-  //       window.requestAnimationFrame( () => {
-  //         this.setState( { open: this.props.open }, () => {
-  //           window.setTimeout( () => { this.setState( { animating: false } ); }, 2000 );
-  //         } );
-  //       } );
-  //     } );
-  //   }
-  // }
+  renderReviews () {
+    if ( this.props.open ) {
+      return this.props.book.reviews.map( review => (
+        <Review>
+          <div>{ review.rating }</div>
+          <div>{ review.user }</div>
+        </Review>
+      ) );
+    }
+  }
+
+  renderCheckedOut () {
+    if ( this.props.book.checked_out ) {
+      return (
+        <React.Fragment>
+          Checked Out: { this.props.book.checked_out }
+        </React.Fragment>
+      );
+    }
+  }
+
+  renderCheckOut () {
+    if ( this.props.open && !this.props.book.checked_out ) {
+      return (
+        <button
+          onClick={ this.checkoutHandler }>
+          Check Out
+        </button>
+      );
+    }
+  }
 
   render () {
     return (
-      <BookCover open={ this.props.open }>
-        <span>{ this.props.book.id }</span>
-        <span>{ this.props.book.author }</span>
+      <BookCover
+        open={ this.props.open }
+        checked_out={ this.props.book.checked_out }>
+        <div>{ this.props.book.id }</div>
+        <div>{ this.props.book.author }</div>
+        
+        { this.renderCheckedOut() }
+        { this.renderCheckOut() }
+        { this.renderReviews() }
       </BookCover>
     );
   }
@@ -50,6 +67,7 @@ export default class Book extends React.Component<Props, State> {
 
 interface BookCoverProps {
   open: boolean;
+  checked_out: string;
 }
 const BookCover = styled<BookCoverProps, 'div'>( 'div' )`
   position: ${ props => props.open ? 'fixed' : 'relative' };
@@ -58,15 +76,22 @@ const BookCover = styled<BookCoverProps, 'div'>( 'div' )`
   right: 0px;
   bottom: 0px;
 
-  transition: left 2s ease-in;
-  transition: top 2s ease-in;
-  transition: right 2s ease-in;
-  transition: bottom 2s ease-in;
-
   display: flex;
   flex-direction: column;
-  border: thin solid brown;
+  min-height: 75px;
+  border: thin solid ${ props => props.checked_out ? 'black' : 'brown' };
   padding: 16px;
   z-index: ${ props => props.open ? 2 : 1 };
   background-color: #FFFFFF;
+  opacity: ${ props => !props.open && props.checked_out ? 0.75 : 1 };
+`;
+
+const Review = styled.div`
+  border: thin solid darkgreen;
+  padding: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+
+  display: flex;
+  flex-direction: column;
 `;

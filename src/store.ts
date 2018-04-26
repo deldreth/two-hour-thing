@@ -8,7 +8,6 @@ const middleware: Middleware[] = [];
 middleware.push( effectsMiddleware( effects ) );
 
 export default function configureStore ( initialState?: RootState ): Store<RootState> {
-  // Handle situation where window exists outside of browser extension context
   const windowIfDefined = typeof window === 'undefined' ? null : window as any;
 
   const enhance = [

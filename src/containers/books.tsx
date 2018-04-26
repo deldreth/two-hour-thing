@@ -27,7 +27,8 @@ class Books extends React.Component<Props & typeof Creators> {
         } }>
         <Book
           book={ book }
-          open={ book.id === this.props.open_book } />
+          open={ book.id === this.props.open_book }
+          onCheckout={ () => this.props.checkoutBook( 1, book.id ) }/>
       </BookShelf>
     ) );
   }

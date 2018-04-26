@@ -22,9 +22,13 @@ class App extends React.Component<Props & typeof Creators> {
   render () {
     return (
       <AppWrapper>
-        <div className="row">
+        <BookContainer>
           <Books />
-        </div>
+        </BookContainer>
+
+        <BookAdder>
+          Add Your Books Here
+        </BookAdder>
       </AppWrapper>
     );
   }
@@ -34,7 +38,11 @@ const AppWrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
 
-  padding-top: 32px;
+  @media ( min-width: 356px ) {
+    max-width: 100%;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
   
   @media ( min-width: 512px ) {
     max-width: 100%;
@@ -45,6 +53,21 @@ const AppWrapper = styled.div`
   @media ( min-width: 768px ) {
     max-width: 1024px;
   }
+`;
+
+const BookContainer = styled.div.attrs( {
+   className: 'row',
+} )`
+  height: 80vh;
+  overflow-y: auto;
+`;
+
+const BookAdder = styled.div.attrs( {
+  className: 'row',
+} )`
+  border-top: thin solid black;
+  height: 20vh;
+  padding: 16px;
 `;
 
 export default hot( module )(
