@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { Creators } from 'app/actions';
 import { RootState } from 'app/reducers';
 
+import Adder from 'app/components/adder';
 import Books from 'app/containers/books';
 
 export interface Props {
@@ -26,9 +27,7 @@ class App extends React.Component<Props & typeof Creators> {
           <Books />
         </BookContainer>
 
-        <BookAdder>
-          Add Your Books Here
-        </BookAdder>
+        <Adder create={ this.props.createBook }/>
       </AppWrapper>
     );
   }
@@ -60,14 +59,6 @@ const BookContainer = styled.div.attrs( {
 } )`
   height: 80vh;
   overflow-y: auto;
-`;
-
-const BookAdder = styled.div.attrs( {
-  className: 'row',
-} )`
-  border-top: thin solid black;
-  height: 20vh;
-  padding: 16px;
 `;
 
 export default hot( module )(

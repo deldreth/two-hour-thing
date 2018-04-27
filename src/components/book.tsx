@@ -7,6 +7,8 @@ import { checkoutBook, returnBook } from 'app/actions';
 import { RootState } from 'app/reducers';
 import { Book as BookType } from 'app/types';
 
+import { Button } from 'app/components/shared';
+
 export interface Props {
   book: BookType;
   open: boolean;
@@ -56,18 +58,18 @@ export default class Book extends React.Component<Props> {
     if ( this.props.open ) {
       if ( !this.props.book.checked_out ) {
         return (
-          <button
+          <Button
             onClick={ this.checkoutHandler }>
             Check Out
-          </button>
+          </Button>
         );
       }
 
       return (
-        <button
+        <Button
           onClick={ this.returnHandler }>
           Return
-        </button>
+        </Button>
       );
     }
   }

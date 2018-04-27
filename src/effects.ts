@@ -1,7 +1,8 @@
 import bookApi from 'books-mock-api';
 import { Effect, EffectParams } from 'redux-effex';
 
-import { FetchAllAction, receiveBooks, receiveUsers, StartAction, Types } from 'app/actions';
+import { CreateBookAction, FetchAllAction, receiveBooks,
+  receiveUsers, StartAction, Types } from 'app/actions';
 
 async function start ( { action, dispatch }: EffectParams<StartAction> ): Promise<any> {
   return null;
@@ -12,7 +13,12 @@ async function fetchAll ( { dispatch }: EffectParams<FetchAllAction> ): Promise<
   dispatch( receiveUsers( await bookApi.getUsers() ) );
 }
 
+async function createBook ( { action, dispatch }: EffectParams<CreateBookAction> ): Promise<any> {
+  bookApi.createBook( action.payload.book );
+}
+
 export default [
   { action: Types.START, effect: start },
   { action: Types.FETCH_ALL, effect: fetchAll },
+  { action: Types.CREATE_BOOK, effect: createBook },
 ];
