@@ -23,6 +23,14 @@ export default class Book extends React.Component<Props> {
     this.props.onReturn( this.props.book.id );
   }
 
+  renderClose () {
+    if ( this.props.open ) {
+      return (
+        <Close>X</Close>
+      );
+    }
+  }
+
   renderReviews () {
     if ( this.props.open ) {
       return this.props.book.reviews.map( ( review, index ) => (
@@ -35,7 +43,7 @@ export default class Book extends React.Component<Props> {
   }
 
   renderCheckedOut () {
-    if ( this.props.book.checked_out ) {
+    if ( this.props.open && this.props.book.checked_out ) {
       return (
         <React.Fragment>
           Checked Out: { this.props.book.checked_out }
@@ -69,6 +77,8 @@ export default class Book extends React.Component<Props> {
       <BookCover
         open={ this.props.open }
         checked_out={ this.props.book.checked_out }>
+        { this.renderClose() }
+
         <img src={ this.props.book.image }/>
 
         <div>{ this.props.book.title }</div>
@@ -107,6 +117,23 @@ const BookCover = styled<BookCoverProps, 'div'>( 'div' )`
     margin-left: auto;
     margin-right: auto;
   }
+
+  &:hover {
+    cursor: ${ props => !props.open ? 'pointer' : 'cursor' };
+  }
+
+  button {
+    max-width: 200px;
+    height: 44px;
+    appearance: none;
+    border: thin solid #CCCCCC;
+    margin-top: 16px;
+    margin-bottom: 12px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `;
 
 const Review = styled.div`
@@ -117,4 +144,14 @@ const Review = styled.div`
 
   display: flex;
   flex-direction: column;
+`;
+
+const Close = styled.div`
+  position: absolute;
+  right: 16px;
+
+  font-size: 24px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
