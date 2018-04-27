@@ -14,7 +14,8 @@ async function fetchAll ( { dispatch }: EffectParams<FetchAllAction> ): Promise<
 }
 
 async function createBook ( { action, dispatch }: EffectParams<CreateBookAction> ): Promise<any> {
-  bookApi.createBook( action.payload.book );
+  await bookApi.createBook( action.payload.book );
+  dispatch( receiveBooks( await bookApi.getBooks() ) );
 }
 
 export default [
