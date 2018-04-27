@@ -11,6 +11,7 @@ export const enum Types {
   CREATE_BOOK = 'CREATE_BOOK',
   UPDATE_BOOK = 'UPDATE_BOOK',
   CHECKOUT_BOOK = 'CHECKOUT_BOOK',
+  RETURN_BOOK = 'RETURN_BOOK',
 }
 
 export interface StartAction extends Action {
@@ -61,7 +62,14 @@ export interface UpdateBookAction extends Action {
 export interface CheckoutBookAction extends Action {
   type: Types.CHECKOUT_BOOK;
   payload: {
-    user_id: number,
+    user_id: string,
+    book_id: string,
+  };
+}
+
+export interface ReturnBookAction extends Action {
+  type: Types.RETURN_BOOK;
+  payload: {
     book_id: string,
   };
 }
@@ -101,9 +109,14 @@ export const updateBook = ( book: Book ): UpdateBookAction => ( {
   payload: { book },
 } );
 
-export const checkoutBook = ( user_id: number, book_id: string ): CheckoutBookAction => ( {
+export const checkoutBook = ( user_id: string, book_id: string ): CheckoutBookAction => ( {
   type: Types.CHECKOUT_BOOK,
   payload: { user_id, book_id },
+} );
+
+export const returnBook = ( book_id: string ): ReturnBookAction => ( {
+  type: Types.RETURN_BOOK,
+  payload: { book_id },
 } );
 
 export const Creators = {
@@ -115,4 +128,5 @@ export const Creators = {
   createBook,
   updateBook,
   checkoutBook,
+  returnBook,
 };

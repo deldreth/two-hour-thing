@@ -1,6 +1,8 @@
 import { combineReducers, Reducer } from 'redux';
 
-import { OpenBookAction, ReceiveBooksAction, ReceiveUsersAction, StartAction, Types } from 'app/actions';
+import { CheckoutBookAction, OpenBookAction, ReceiveBooksAction,
+  ReceiveUsersAction, ReturnBookAction, StartAction,
+  Types } from 'app/actions';
 import { Book, User } from 'app/types';
 import { mongucer } from 'app/utils';
 
@@ -52,11 +54,39 @@ function receiveUsers ( state: AppState = initialState, action: ReceiveUsersActi
   };
 }
 
+function checkoutBook ( state: AppState = initialState, action: CheckoutBookAction ): AppState {
+  return {
+    ...state,
+    books: state.books.map( book => {
+      if ( book.id === action.payload.book_id ) {
+        book.checked_out = action.payload.user_id;
+      }
+
+      return book;
+    } ),
+  };
+}
+
+function returnBook ( state: AppState = initialState, action: ReturnBookAction ): AppState {
+  return {
+    ...state,
+    books: state.books.map( book => {
+      if ( book.id === action.payload.book_id ) {
+        book.checked_out = null;
+      }
+
+      return book;
+    } ),
+  };
+}
+
 const handlers = {
   [ Types.START ]: start,
   [ Types.OPEN_BOOK ]: openBook,
   [ Types.RECEIVE_BOOKS ]: receiveBooks,
   [ Types.RECEIVE_USERS ]: receiveUsers,
+  [ Types.CHECKOUT_BOOK ]: checkoutBook,
+  [ Types.RETURN_BOOK ]: returnBook,
 };
 
 export default combineReducers( {

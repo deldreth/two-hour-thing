@@ -18,17 +18,20 @@ class Books extends React.Component<Props & typeof Creators> {
     return this.props.books.map( book => (
       <BookShelf
         key={ book.id }
-        onClick={ () => {
-          if ( book.id === this.props.open_book ) {
-            this.props.openBook( null );
-          } else {
-            this.props.openBook( book.id );
+        onClick={ ( event: React.SyntheticEvent<HTMLDivElement | HTMLButtonElement> ) => {
+          if ( event.target instanceof HTMLButtonElement === false ) {
+            if ( book.id === this.props.open_book ) {
+              this.props.openBook( null );
+            } else {
+              this.props.openBook( book.id );
+            }
           }
         } }>
         <Book
           book={ book }
           open={ book.id === this.props.open_book }
-          onCheckout={ () => this.props.checkoutBook( 1, book.id ) }/>
+          onCheckout={ this.props.checkoutBook }
+          onReturn={ this.props.returnBook }/>
       </BookShelf>
     ) );
   }

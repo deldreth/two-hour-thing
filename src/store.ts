@@ -11,7 +11,7 @@ export default function configureStore ( initialState?: RootState ): Store<RootS
   const windowIfDefined = typeof window === 'undefined' ? null : window as any;
 
   const enhance = [
-    applyMiddleware( ...middleware )
+    applyMiddleware( ...middleware ),
   ];
 
   let composition = compose;

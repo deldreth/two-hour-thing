@@ -3,24 +3,30 @@ import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import styled from 'styled-components';
 
+import { checkoutBook, returnBook } from 'app/actions';
 import { RootState } from 'app/reducers';
 import { Book as BookType } from 'app/types';
 
 export interface Props {
   book: BookType;
   open: boolean;
-  onCheckout: () => void;
+  onCheckout: typeof checkoutBook;
+  onReturn: typeof returnBook;
 }
 
 export default class Book extends React.Component<Props> {
   checkoutHandler = () => {
-    this.props.onCheckout();
+    this.props.onCheckout( 'kent_dodds', this.props.book.id );
+  }
+
+  returnHandler = () => {
+    this.props.onReturn( this.props.book.id );
   }
 
   renderReviews () {
     if ( this.props.open ) {
-      return this.props.book.reviews.map( review => (
-        <Review>
+      return this.props.book.reviews.map( ( review, index ) => (
+        <Review key={ index }>
           <div>{ review.rating }</div>
           <div>{ review.user }</div>
         </Review>
@@ -38,12 +44,21 @@ export default class Book extends React.Component<Props> {
     }
   }
 
-  renderCheckOut () {
-    if ( this.props.open && !this.props.book.checked_out ) {
+  renderReturnCheckout () {
+    if ( this.props.open ) {
+      if ( !this.props.book.checked_out ) {
+        return (
+          <button
+            onClick={ this.checkoutHandler }>
+            Check Out
+          </button>
+        );
+      }
+
       return (
         <button
-          onClick={ this.checkoutHandler }>
-          Check Out
+          onClick={ this.returnHandler }>
+          Return
         </button>
       );
     }
@@ -54,11 +69,13 @@ export default class Book extends React.Component<Props> {
       <BookCover
         open={ this.props.open }
         checked_out={ this.props.book.checked_out }>
-        <div>{ this.props.book.id }</div>
+        <img src={ this.props.book.image }/>
+
+        <div>{ this.props.book.title }</div>
         <div>{ this.props.book.author }</div>
         
         { this.renderCheckedOut() }
-        { this.renderCheckOut() }
+        { this.renderReturnCheckout() }
         { this.renderReviews() }
       </BookCover>
     );
@@ -84,6 +101,12 @@ const BookCover = styled<BookCoverProps, 'div'>( 'div' )`
   z-index: ${ props => props.open ? 2 : 1 };
   background-color: #FFFFFF;
   opacity: ${ props => !props.open && props.checked_out ? 0.75 : 1 };
+
+  img {
+    max-width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 `;
 
 const Review = styled.div`
