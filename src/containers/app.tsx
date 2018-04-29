@@ -1,71 +1,32 @@
+import gql from 'graphql-tag';
+import React from 'react';
+import { Query } from 'react-apollo';
 import { hot } from 'react-hot-loader';
 
-import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
-import styled from 'styled-components';
+import CssBaseline from 'material-ui/CssBaseline';
+import Grid from 'material-ui/Grid';
+import Modal from 'material-ui/Modal';
 
-import { Creators } from 'app/actions';
-import { RootState } from 'app/reducers';
-
-import Adder from 'app/components/adder';
 import Books from 'app/containers/books';
+
+import ModalBook from 'app/containers/modalBook';
 
 export interface Props {
   loaded: boolean;
 }
 
-class App extends React.Component<Props & typeof Creators> {
-  componentDidMount () {
-    this.props.fetchAll();
-  }
-
+export default class App extends React.Component {
   render () {
     return (
-      <AppWrapper>
-        <BookContainer>
-          <Books />
-        </BookContainer>
+      <React.Fragment>
+        <CssBaseline/>
 
-        <Adder create={ this.props.createBook }/>
-      </AppWrapper>
+        <Grid container spacing={ 8 }>
+          <Books />
+        </Grid>
+
+        <ModalBook />
+      </React.Fragment>
     );
   }
 }
-
-const AppWrapper = styled.div`
-  margin-left: auto;
-  margin-right: auto;
-
-  @media ( min-width: 356px ) {
-    max-width: 100%;
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-  
-  @media ( min-width: 512px ) {
-    max-width: 100%;
-    padding-left: 32px;
-    padding-right: 32px;
-  }
-
-  @media ( min-width: 768px ) {
-    max-width: 1024px;
-  }
-`;
-
-const BookContainer = styled.div.attrs( {
-   className: 'row',
-} )`
-  height: 80vh;
-  overflow-y: auto;
-`;
-
-export default hot( module )(
-  connect(
-    ( state: RootState ): Props => ( {
-      loaded: state.app.loaded,
-    } ),
-    ( dispatch: Dispatch<RootState> ): typeof Creators => bindActionCreators( Creators, dispatch ),
-  )( App ),
-);

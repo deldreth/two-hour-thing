@@ -9,7 +9,7 @@
     "no-shadowed-variables": false,
     "no-var-requires": false,
     "no-namespace": false,
-    "trailing-comma": [ true, { "multiline": "always", "singleline": "never"} ],
+    "trailing-comma": [ true, { "multiline": "always", "singleline": "never" } ],
     "interface-name": false,
     "no-implicit-dependencies": false,
     "no-trailing-whitespace": false,
