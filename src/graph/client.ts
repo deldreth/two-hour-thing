@@ -4,8 +4,6 @@ import { withClientState } from 'apollo-link-state';
 
 import gql from 'graphql-tag';
 
-import Mutation from 'app/graph/resolvers/mutation';
-
 import BookStore from 'app/graph/stores/bookStore';
 
 const cache = new InMemoryCache();
