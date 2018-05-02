@@ -1,8 +1,6 @@
 import gql from 'graphql-tag';
 import React from 'react';
 import { Mutation } from 'react-apollo';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
 
 import Button from 'material-ui/Button';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
