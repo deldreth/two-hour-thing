@@ -18,13 +18,13 @@ interface BookState {
   open?: string;
 }
 
-const defaults = {
+const defaults: BookState = {
   books: [],
   open: null,
 };
 
 const bookQuery = gql`
-  {
+  query GetBooks {
     books @client {
       id
       title
@@ -54,9 +54,26 @@ const getOpenBookQuery = gql`
   }
 `;
 
+function book ( _, { id }, { cache } ) {
+  return cache.readFragment( {
+    id: `Book:${id}`,
+    fragment: gql`
+      fragment openBook on Book {
+        id
+        title
+        author
+        image
+        description
+        reviews
+        checked_out
+      }
+    `,
+  } );
+}
+
 const initBookMutation = gql`
-  mutation initBooks($id: String) {
-    initBooks(id: $id) @client
+  mutation initBooks {
+    initBooks @client
   }
 `;
 
@@ -74,8 +91,8 @@ const toggleBookMutation = gql`
 
 function initBooks ( _obj, id, { cache } ): Promise<Book[]> {
   return api.getBooks().then( books => {
-    const nextBooks = books.map( book => ( {
-      ...book,
+    const nextBooks = books.map( bookToType => ( {
+      ...bookToType,
       __typename: 'Book',
       reviews: [],
     } ) );
@@ -88,10 +105,10 @@ function initBooks ( _obj, id, { cache } ): Promise<Book[]> {
   } );
 }
 
-function addBook ( _obj, { book }, { cache } ) {
+function addBook ( _obj, { data }, { cache } ) {
   const { books } = cache.readQuery( { bookQuery } );
 
-  const nextBooks = books.push( book );
+  const nextBooks = books.push( data );
 
   cache.writeQuery( {
     bookQuery,
@@ -99,21 +116,28 @@ function addBook ( _obj, { book }, { cache } ) {
   } );
 }
 
-function toggleBook ( _obj, book, { cache } ): string | null {
+function toggleBook ( _obj, { id }, { cache } ): string | null {
   const { open } = cache.readQuery( { query: openBookQuery } );
 
-  const params = { query: getOpenBookQuery };
-  const stuff = cache.readQuery( params );
-  console.log( stuff );
-
-  const openBook = ( open === book ) ? null : book.id;
+  const openBook = ( open ) ? null : id;
   cache.writeData( {
-    query: getOpenBookQuery,
     data: { open: openBook },
   } );
 
   return openBook;
 }
+
+const store = {
+  defaults,
+  query: {
+    book,
+  },
+  mutations: {
+    initBooks,
+    addBook,
+    toggleBook,
+  },
+};
 
 const bookQueryHandler = {
   props: ( { ownProps, data }, last ) => ( {
@@ -122,26 +146,18 @@ const bookQueryHandler = {
   } ),
 };
 
-const openBookQueryHandler = {
-  props: ( { ownProps, data: { open = [] } } ) => ( {
+const openBookHandler = {
+  props: ( { ownProps, data }, last ) => ( {
     ...ownProps,
-    open,
+    open: data.open,
   } ),
-};
-
-const store = {
-  defaults,
-  mutations: {
-    initBooks,
-    addBook,
-    toggleBook,
-  },
 };
 
 export default {
   store,
   withBooks: compose(
     graphql( bookQuery, bookQueryHandler ),
+    graphql( openBookQuery, openBookHandler ),
     graphql( initBookMutation, { name: 'initBookMutation' } ),
     graphql( toggleBookMutation, { name: 'toggleBookMutation' } ),
   ),

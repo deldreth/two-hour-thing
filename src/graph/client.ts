@@ -1,9 +1,8 @@
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import ApolloClient from 'apollo-client';
-import { ApolloLink } from 'apollo-link';
-import { HttpLink } from 'apollo-link-http';
 import { withClientState } from 'apollo-link-state';
-import { toIdValue } from 'apollo-utilities';
+
+import gql from 'graphql-tag';
 
 import Mutation from 'app/graph/resolvers/mutation';
 
@@ -17,6 +16,9 @@ const stateLink = withClientState( {
     ...BookStore.store.defaults,
   },
   resolvers: {
+    Query: {
+      ...BookStore.store.query,
+    },
     Mutation: {
       ...BookStore.store.mutations,
     },

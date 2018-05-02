@@ -27,6 +27,7 @@
     "webpack-serve": "^0.3.1"
   },
   "dependencies": {
+    "@types/recompose": "^0.26.1",
     "apisauce": "^0.14.3",
     "apollo-boost": "^0.1.4",
     "apollo-cache-inmemory": "^1.1.12",
@@ -39,6 +40,7 @@
     "flexboxgrid": "^6.3.1",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.1",
+    "graphql-tools": "^3.0.0",
     "material-ui": "^1.0.0-beta.44",
     "normalize.css": "^8.0.0",
     "react": "^16.3.2",

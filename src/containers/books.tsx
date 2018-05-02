@@ -1,27 +1,30 @@
 import gql from 'graphql-tag';
+import React from 'react';
+import { compose, lifecycle } from 'recompose';
+import styled from 'styled-components';
+
 import Button from 'material-ui/Button';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 
-import React from 'react';
-import { graphql } from 'react-apollo';
-import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
-import { bindActionCreators, Dispatch } from 'redux';
-import styled from 'styled-components';
-
 import Book from 'app/components/book';
 import BookStore from 'app/graph/stores/bookStore';
 import { Book as BookType } from 'app/types';
 
-const execMethods = lifecycle( {
+interface Props {
+  books: BookType[];
+  initBookMutation: () => void;
+  toggleBookMutation: () => void;
+}
+
+const lifecycles = lifecycle<Props, {}>( {
   componentDidMount () {
     this.props.initBookMutation();
   },
 } );
 
-function Books ( { books, toggleBookMutation }: any ) {
+function Books ( { books, toggleBookMutation, initBookMutation }: any ) {
   if ( books ) {
     return books.map( ( book: BookType ) => 
       <Book key={ book.id }
@@ -30,12 +33,10 @@ function Books ( { books, toggleBookMutation }: any ) {
     );
   }
 
-  return <div>Nothing</div>;
+  return <div>No Books Here</div>;
 }
 
-const BooksComposed = compose(
+export default compose(
   BookStore.withBooks,
-  execMethods,
+  lifecycles,
 )( Books );
-
-export default ( BooksComposed );

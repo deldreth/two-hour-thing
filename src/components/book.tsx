@@ -11,12 +11,6 @@ import Typography from 'material-ui/Typography';
 
 import { Book as BookType, Review } from 'app/types';
 
-const OpenBook = gql`
-  mutation OpenBook($id: String!) {
-    openBook(id: $id) @client
-  }
-`;
-
 function Ratings ( reviews: Review[] ) {
   let sum = 0;
   reviews.forEach( review => sum += review.rating );

@@ -3,6 +3,7 @@ import { hot } from 'react-hot-loader';
 import gql from 'graphql-tag';
 import React from 'react';
 import { graphql } from 'react-apollo';
+import compose from 'recompose/compose';
 import styled, { ThemeProvider } from 'styled-components';
 
 import CssBaseline from 'material-ui/CssBaseline';
@@ -19,45 +20,26 @@ import AddCard from 'app/components/addCard';
 
 const theme = createMuiTheme();
 
-interface Props {
-  mutate: () => void;
+function App () {
+  return (
+    <MuiThemeProvider theme={ theme }>
+      <ThemeProvider theme={ theme }>
+        <AppContainer>
+          <CssBaseline/>
+
+          <Grid container spacing={ 16 }>
+            <Books />
+            <AddCard />
+          </Grid>
+
+          <ModalBook />
+        </AppContainer>
+      </ThemeProvider>
+    </MuiThemeProvider>
+  );
 }
 
-class App extends React.Component<Props> {
-  componentDidMount () {
-    this.props.mutate();
-  }
-
-  render () {
-    return (
-      <MuiThemeProvider theme={ theme }>
-        <ThemeProvider theme={ theme }>
-          <AppContainer>
-            <CssBaseline/>
-
-            <Grid container spacing={ 16 }>
-              <Books />
-              <AddCard />
-            </Grid>
-
-            <ModalBook />
-            <ModalAdd />
-          </AppContainer>
-        </ThemeProvider>
-      </MuiThemeProvider>
-    );
-  }
-}
-
-const GET_BOOKS = gql`
-  mutation GetBooks($id: String!) {
-    getBooks(id: $id) @client
-  }
-`;
-
-const Graphed = graphql( GET_BOOKS )( App as any ); 
-
-export default hot( module )( Graphed );
+export default App;
 
 const AppContainer = styled.div`
   margin-top: 24px;

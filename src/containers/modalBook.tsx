@@ -6,6 +6,7 @@ import Modal from 'material-ui/Modal';
 import Paper from 'material-ui/Paper';
 
 import Book from 'app/components/book';
+import BookStore from 'app/graph/stores/bookStore';
 
 const styles = {
   display: 'flex',
@@ -13,29 +14,39 @@ const styles = {
   alignItems: 'center',
 };
 
-function ModalBook () {
+function ModalBook ( { open, toggleBookMutation } ) {
   return (
-    <div/>
-    // <Modal
-    //   open={ !!open_book }
-    //   onBackdropClick={ mutate }
-    //   style={ styles }>
-    //   <Query query={ GetOpenBook } variables={{ id: open_book }}>
-    //     { ( { data } ) => {
-    //       if ( data.Book ) {
-    //         return <Book renderFull { ...data.Book }/>;
-    //       }
+    <Modal
+      open={ ( open ) ? true : false }
+      onBackdropClick={ toggleBookMutation }
+      style={ styles }>
+      <Query query={ GET_OPEN_BOOK } variables={{ id: open }}>
+        { ( { data } ) => {
+          if ( data.book ) {
+            return <Book renderFull { ...data.book }/>;
+          }
 
-    //       return null;
-    //      } }
-    //   </Query>
-    // </Modal>
+          return null;
+         } }
+      </Query>
+    </Modal>
   );
 }
 
-export default ModalBook;
+const GET_OPEN_BOOK = gql`
+  query GetOpenBook($id: ID!) {
+    book(id: $id) @client {
+      id,
+      title,
+      author,
+      image,
+      reviews,
+      description,
+      checked_out
+    }
+  }
+`;
 
-// export default compose(
-//   graphql( QueryOpenBook ),
-//   graphql( MutationCloseBook ),
-// )( ModalBook );
+export default compose(
+  BookStore.withBooks,
+)( ModalBook );
