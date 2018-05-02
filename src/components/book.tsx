@@ -11,34 +11,11 @@ import Typography from 'material-ui/Typography';
 
 import { Book as BookType, Review } from 'app/types';
 
-const styles = {
-  card: {
-    height: 300,
-  },
-  media: {
-    height: 150,
-  },
-};
-
 const OpenBook = gql`
   mutation OpenBook($id: String!) {
     openBook(id: $id) @client
   }
 `;
-
-function BookActions ( id: string ) {
-  return (
-    <CardActions>
-      <Mutation mutation={ OpenBook } variables={{ id }}>
-        { openBook => (
-          <Button onClick={ () => openBook() } color="primary">
-            View
-          </Button>
-        ) }
-      </Mutation>
-    </CardActions>
-  );
-}
 
 function Ratings ( reviews: Review[] ) {
   let sum = 0;
@@ -49,9 +26,30 @@ function Ratings ( reviews: Review[] ) {
 
 interface Props extends BookType {
   renderFull?: boolean;
+  onOpen: ( data: any ) => void;
 }
 
-export default function ( { renderFull, id, image, title, author, reviews, description }: Props ) {
+const styles = {
+  renderFull: {
+    card: {
+      width: '80vw',
+      height: '80vh',
+    },
+    media: {
+      height: 250,
+    },
+  },
+  default: {
+    card: {
+      height: 300,
+    },
+    media: {
+      height: 150,
+    },
+  },
+};
+
+function BookCard ( { renderFull, id, title, author, image, reviews, description, onOpen }: Props ) {
   let RenderFull = null;
   if ( renderFull ) {
     RenderFull = () => (
@@ -59,45 +57,49 @@ export default function ( { renderFull, id, image, title, author, reviews, descr
         <Typography paragraph variant="body2">
           Average Rating: { Ratings( reviews ) }
         </Typography>
-
         <Typography paragraph>
           { description }
         </Typography>
       </React.Fragment>
     );
-  } else {
-    RenderFull = () => (
-      <React.Fragment>
-        { BookActions( id ) }
+  }
 
-      </React.Fragment>
-    );
+  const renderStyles = styles[ renderFull ? 'renderFull' : 'default' ];
+
+  return (
+    <Card style={ renderStyles.card }>
+      <CardMedia style={ renderStyles.media }
+        image={ image }
+        title={ title }/>
+      <CardContent>
+        <Typography variant="headline"
+          component="h5"
+          noWrap>
+          { title }
+        </Typography>
+        
+        <Typography component="p">
+          by { author }
+        </Typography>
+      </CardContent>
+
+      <CardActions>
+        <Button onClick={ () => onOpen( {variables: { id } } ) } color="primary">
+          View
+        </Button>
+      </CardActions>
+    </Card>
+  );
+}
+
+export default function ( book: Props ) {
+  if ( book.renderFull ) {
+    return <BookCard { ...book }/>;
   }
 
   return (
     <Grid item xs={ 12 } sm={ 6 } md={ 4 }>
-      <Card
-        style={ styles.card }>
-        <CardMedia
-          style={ styles.media }
-          image={ image }
-          title={ title }/>
-        <CardContent>
-          <Typography gutterBottom variant="headline" component="h5" noWrap>
-            { title }
-          </Typography>
-          
-          <Typography component="p">
-            by { author }
-          </Typography>
-        </CardContent>
-
-        <RenderFull />
-      </Card>
+      <BookCard { ...book }/>  
     </Grid>
   );
-}
-
-export function BookRenderFull ( { id, image, title, author, reviews, description }: Props ) {
-
 }

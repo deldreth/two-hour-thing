@@ -13,52 +13,29 @@ const styles = {
   alignItems: 'center',
 };
 
-function ModalBook ( { data, mutate } ) {
-  const { open_book } = data;
+function ModalBook () {
   return (
-    <Modal
-      open={ !!open_book }
-      onBackdropClick={ mutate }
-      style={ styles }>
-      <Query query={ GetOpenBook } variables={{ id: open_book }}>
-        { ( { data } ) => {
-          if ( data.Book ) {
-            return <Book renderFull { ...data.Book }/>;
-          }
+    <div/>
+    // <Modal
+    //   open={ !!open_book }
+    //   onBackdropClick={ mutate }
+    //   style={ styles }>
+    //   <Query query={ GetOpenBook } variables={{ id: open_book }}>
+    //     { ( { data } ) => {
+    //       if ( data.Book ) {
+    //         return <Book renderFull { ...data.Book }/>;
+    //       }
 
-          return null;
-         } }
-      </Query>
-    </Modal>
+    //       return null;
+    //      } }
+    //   </Query>
+    // </Modal>
   );
 }
 
-const MutationCloseBook = gql`
-  mutation CloseBook {
-    closeBook @client
-  }
-`;
+export default ModalBook;
 
-const QueryOpenBook = gql`
-  {
-    open_book @client
-  }
-`;
-
-const GetOpenBook = gql`
-  query Book($id: ID!) {
-    Book(id: $id) {
-      id
-      title
-      author
-      reviews
-      image
-      description
-    }
-  }
-`;
-
-export default compose(
-  graphql( QueryOpenBook ),
-  graphql( MutationCloseBook ),
-)( ModalBook );
+// export default compose(
+//   graphql( QueryOpenBook ),
+//   graphql( MutationCloseBook ),
+// )( ModalBook );
