@@ -1,66 +1,40 @@
 import gql from 'graphql-tag';
 import React from 'react';
 import { Mutation } from 'react-apollo';
+import compose from 'recompose/compose';
 
 import Button from 'material-ui/Button';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
-import Grid from 'material-ui/Grid';
+import { withStyles } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
 
 import { Book as BookType, Review } from 'app/types';
 
-function Ratings ( reviews: Review[] ) {
-  let sum = 0;
-  reviews.forEach( review => sum += review.rating );
-
-  return sum / reviews.length;
+interface ComposedProps extends BookType {
+  classes: any;
 }
 
-interface Props extends BookType {
+interface OuterProps {
   renderFull?: boolean;
   onOpen: ( data: any ) => void;
 }
 
-const styles = {
-  renderFull: {
-    card: {
-      width: '80vw',
-      height: '80vh',
-    },
-    media: {
-      height: 250,
-    },
+const styles = ( theme ) => ( {
+  card: {
+    height: '300px',
   },
-  default: {
-    card: {
-      height: 300,
-    },
-    media: {
-      height: 150,
-    },
+  media: {
+    height: '150px',
   },
-};
+} );
 
-function BookCard ( { renderFull, id, title, author, image, reviews, description, onOpen }: Props ) {
-  let RenderFull = null;
-  if ( renderFull ) {
-    RenderFull = () => (
-      <React.Fragment>
-        <Typography paragraph variant="body2">
-          Average Rating: { Ratings( reviews ) }
-        </Typography>
-        <Typography paragraph>
-          { description }
-        </Typography>
-      </React.Fragment>
-    );
-  }
-
-  const renderStyles = styles[ renderFull ? 'renderFull' : 'default' ];
-
+function Book ( { classes, renderFull, id, title, author, 
+                  image, reviews, description, onOpen }: ComposedProps & OuterProps ) {
   return (
-    <Card style={ renderStyles.card }>
-      <CardMedia style={ renderStyles.media }
+    <Card className={ classes.card }
+      onClick={ () => onOpen( {variables: { id } } ) }>
+      <CardMedia
+        className={ classes.media }
         image={ image }
         title={ title }/>
       <CardContent>
@@ -74,24 +48,10 @@ function BookCard ( { renderFull, id, title, author, image, reviews, description
           by { author }
         </Typography>
       </CardContent>
-
-      <CardActions>
-        <Button onClick={ () => onOpen( {variables: { id } } ) } color="primary">
-          View
-        </Button>
-      </CardActions>
     </Card>
   );
 }
 
-export default function ( book: Props ) {
-  if ( book.renderFull ) {
-    return <BookCard { ...book }/>;
-  }
-
-  return (
-    <Grid item xs={ 12 } sm={ 6 } md={ 4 }>
-      <BookCard { ...book }/>  
-    </Grid>
-  );
-}
+export default compose<ComposedProps, OuterProps>(
+  withStyles( styles, { withTheme: true } ),
+)( Book );

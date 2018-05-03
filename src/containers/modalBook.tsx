@@ -23,7 +23,7 @@ function ModalBook ( { open, toggleBookMutation } ) {
       <Query query={ GET_OPEN_BOOK } variables={{ id: open }}>
         { ( { data } ) => {
           if ( data.book ) {
-            return <Book renderFull { ...data.book }/>;
+            return <Book { ...data.book }/>;
           }
 
           return null;

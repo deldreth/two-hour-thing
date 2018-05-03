@@ -3,6 +3,7 @@ import { hot } from 'react-hot-loader';
 import gql from 'graphql-tag';
 import React from 'react';
 import { graphql } from 'react-apollo';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import compose from 'recompose/compose';
 import styled, { ThemeProvider } from 'styled-components';
 
@@ -27,12 +28,18 @@ function App () {
         <AppContainer>
           <CssBaseline/>
 
-          <Grid container spacing={ 16 }>
-            <Books />
-            <AddCard />
-          </Grid>
+          <Router>
+            <Switch>
+              <Route exact path="/" component={ Books }/>
+              <Route path="/book/:bookId">
+                <div>Books!</div>
+              </Route>
+            </Switch>
+          </Router>
 
           <ModalBook />
+
+          <AddCard />
         </AppContainer>
       </ThemeProvider>
     </MuiThemeProvider>
@@ -42,16 +49,14 @@ function App () {
 export default App;
 
 const AppContainer = styled.div`
-  margin-top: 24px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 90vw;
+  margin: 16px;
 
   @media only screen and (min-width : ${ props => props.theme.breakpoints.values.sm }px ) {
-    width: 80vw;
+    margin: 16px auto;
+    max-width: ${ props => props.theme.breakpoints.values.sm }px;
   }
 
   @media only screen and (min-width : ${ props => props.theme.breakpoints.values.md }px ) {
-    width: 70vw;
+    max-width: ${ props => props.theme.breakpoints.values.md }px;
   }
 `;

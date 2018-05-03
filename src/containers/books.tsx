@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import React from 'react';
-import { compose, lifecycle } from 'recompose';
-import styled from 'styled-components';
+import compose from 'recompose/compose';
+import lifecycle from 'recompose/lifecycle';
 
 import Button from 'material-ui/Button';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
@@ -24,19 +24,26 @@ const lifecycles = lifecycle<Props, {}>( {
   },
 } );
 
-function Books ( { books, toggleBookMutation, initBookMutation }: any ) {
+function Books ( { books, toggleBookMutation, initBookMutation }: Props ) {
   if ( books ) {
-    return books.map( ( book: BookType ) => 
-      <Book key={ book.id }
-        { ...book }
-        onOpen={ toggleBookMutation }/>,
+    return (
+      <Grid container spacing={ 16 }>
+        {
+          books.map( ( book: BookType ) => 
+            <Grid item key={ book.id }
+              xs={ 12 } sm={ 6 } md={ 4 }>
+              <Book { ...book } onOpen={ toggleBookMutation }/>
+            </Grid>,
+          )
+        }
+      </Grid>
     );
   }
 
   return <div>No Books Here</div>;
 }
 
-export default compose(
+export default compose<Props, {}>(
   BookStore.withBooks,
   lifecycles,
 )( Books );
