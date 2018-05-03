@@ -1,57 +1,40 @@
-import gql from 'graphql-tag';
 import React from 'react';
-import { Mutation } from 'react-apollo';
-import compose from 'recompose/compose';
+import styled from 'styled-components';
 
-import Button from 'material-ui/Button';
-import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
-import { withStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
+import Card, { CardMedia } from 'material-ui/Card';
 
-import { Book as BookType, Review } from 'app/types';
+import { Book as BookType } from 'app/types';
 
-interface ComposedProps extends BookType {
-  classes: any;
+interface Props extends BookType {
+  onClick: ( data: any ) => void;
 }
 
-interface OuterProps {
-  renderFull?: boolean;
-  onOpen: ( data: any ) => void;
-}
-
-const styles = ( theme ) => ( {
-  card: {
-    height: '300px',
-  },
-  media: {
-    height: '150px',
-  },
-} );
-
-function Book ( { classes, renderFull, id, title, author, 
-                  image, reviews, description, onOpen }: ComposedProps & OuterProps ) {
+function Book ( { id, title, author, 
+                  image, reviews, 
+                  description, onClick }: Props ) {
   return (
-    <Card className={ classes.card }
-      onClick={ () => onOpen( {variables: { id } } ) }>
-      <CardMedia
-        className={ classes.media }
+    <StyledCard 
+      onClick={ () => onClick( { variables: { id } } ) }>
+      <StyledMedia
         image={ image }
         title={ title }/>
-      <CardContent>
-        <Typography variant="headline"
-          component="h5"
-          noWrap>
-          { title }
-        </Typography>
-        
-        <Typography component="p">
-          by { author }
-        </Typography>
-      </CardContent>
-    </Card>
+    </StyledCard>
   );
 }
 
-export default compose<ComposedProps, OuterProps>(
-  withStyles( styles, { withTheme: true } ),
-)( Book );
+const StyledCard = styled( Card )`
+  height: 300px;
+  &:hover {
+    cursor: pointer;
+  }
+
+  @media only screen and (min-width: ${ props => props.theme.breakpoints.values.sm }px ) {
+    height: 350px;
+  }
+`;
+
+const StyledMedia = styled( CardMedia )`
+  height: 100%;
+`;
+
+export default Book;

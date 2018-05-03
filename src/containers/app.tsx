@@ -51,7 +51,7 @@ function App () {
   );
 }
 
-export default App;
+export default hot( module )( App );
 
 const AppContainer = styled.div`
   margin: 16px;

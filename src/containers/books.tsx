@@ -9,13 +9,10 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 
 import Book from 'app/components/book';
-import BookStore from 'app/graph/stores/bookStore';
+import BookStore, { BookState } from 'app/graph/stores/bookStore';
 import { Book as BookType } from 'app/types';
 
-interface Props {
-  books: BookType[];
-  initBookMutation: () => void;
-  toggleBookMutation: () => void;
+interface Props extends BookState {
 }
 
 const lifecycles = lifecycle<Props, {}>( {
@@ -31,8 +28,8 @@ function Books ( { books, toggleBookMutation, initBookMutation }: Props ) {
         {
           books.map( ( book: BookType ) => 
             <Grid item key={ book.id }
-              xs={ 12 } sm={ 6 } md={ 4 }>
-              <Book { ...book } onOpen={ toggleBookMutation }/>
+              xs={ 6 } sm={ 4 } md={ 3 }>
+              <Book { ...book } onClick={ toggleBookMutation }/>
             </Grid>,
           )
         }

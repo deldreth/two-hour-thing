@@ -13,9 +13,11 @@ interface BookInput {
   description: string;
 }
 
-interface BookState {
+export interface BookState {
   books: Book[];
   open?: string;
+  initBookMutation?: () => void;
+  toggleBookMutation?: ( { variables: { id } } ) => void;
 }
 
 const defaults: BookState = {
@@ -155,7 +157,7 @@ const openBookHandler = {
 
 export default {
   store,
-  withBooks: compose(
+  withBooks: compose<BookState, {}>(
     graphql( bookQuery, bookQueryHandler ),
     graphql( openBookQuery, openBookHandler ),
     graphql( initBookMutation, { name: 'initBookMutation' } ),
