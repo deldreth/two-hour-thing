@@ -13,6 +13,7 @@ import Icon from 'material-ui/Icon';
 import Modal from 'material-ui/Modal';
 import { createMuiTheme, MuiThemeProvider } from 'material-ui/styles';
 
+import Header from 'app/components/layout/header';
 import Books from 'app/containers/books';
 import ModalAdd from 'app/containers/modalAdd';
 import ModalBook from 'app/containers/modalBook';
@@ -27,15 +28,19 @@ function App () {
       <ThemeProvider theme={ theme }>
         <AppContainer>
           <CssBaseline/>
+          
+          <Header />
 
-          <Router>
-            <Switch>
-              <Route exact path="/" component={ Books }/>
-              <Route path="/book/:bookId">
-                <div>Books!</div>
-              </Route>
-            </Switch>
-          </Router>
+          <RouteContainer>
+            <Router>
+              <Switch>
+                <Route exact path="/" component={ Books }/>
+                <Route path="/book/:bookId">
+                  <div>Books!</div>
+                </Route>
+              </Switch>
+            </Router>
+          </RouteContainer>
 
           <ModalBook />
 
@@ -58,5 +63,13 @@ const AppContainer = styled.div`
 
   @media only screen and (min-width : ${ props => props.theme.breakpoints.values.md }px ) {
     max-width: ${ props => props.theme.breakpoints.values.md }px;
+  }
+`;
+
+const RouteContainer = styled.div`
+  margin-top: 72px;
+
+  @media only screen and (min-width : ${ props => props.theme.breakpoints.values.sm }px ) {
+    margin-top: 82px;
   }
 `;
