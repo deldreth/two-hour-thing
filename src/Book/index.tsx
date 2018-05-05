@@ -32,9 +32,10 @@ function Book ( { book, onClick, history, match }: Props ) {
   return (
     <StyledCard 
       onClick={ () => onClick( { variables: { id: book.id } } ) }>
-      <StyledMedia
+      {/* <StyledMedia
         image={ book.image }
-        title={ book.title }/>
+        title={ book.title }/> */}
+      { book.title }
 
       { ExpandedBook( match.params.bookId === book.id, book ) }
     </StyledCard>

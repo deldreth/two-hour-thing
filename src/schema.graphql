@@ -25,7 +25,7 @@ type Book {
 
 type Query {
   book(id: ID!): Book
-  books: Book[]
+  books: [Book]
   open: String
 }
 

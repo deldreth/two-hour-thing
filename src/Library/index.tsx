@@ -9,14 +9,11 @@ import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 
-import Book from 'app/components/Book';
-import { BookState, withBooks } from 'app/graph/stores/bookStore';
+import Book from 'app/Book';
+import withBooks, { BookState } from 'app/Library/withBooks';
 import { Book as BookType } from 'app/types';
 
-interface Props extends BookState {
-  initBookMutation: () => void;
-  toggleBookMutation: () => void;
-}
+interface Props extends BookState {}
 
 function Books ( { books, initBookMutation, toggleBookMutation }: Props ) {
   return (

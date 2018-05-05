@@ -41,14 +41,6 @@ const openBookQuery = gql`
   }
 `;
 
-// function QueryResolver <Return>(): <Return>;
-const printPoint: ( _: {}, vars: string[] ) => string;
-type QueryResolver = ( _: {}, vars: string[] ) => void;
-
-const stuff = <printPoint>() => {
-  
-}
-
 function book ( _, vars, ctx ) {
   console.log( 'first', _ );
   console.log( 'second', vars );

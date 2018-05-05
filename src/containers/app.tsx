@@ -13,11 +13,11 @@ import Icon from 'material-ui/Icon';
 import Modal from 'material-ui/Modal';
 import { createMuiTheme, MuiThemeProvider } from 'material-ui/styles';
 
-import Book from 'app/components/Book';
+import Book from 'app/Book';
 import Header from 'app/components/layout/header';
-import Library from 'app/components/Library';
 import ModalAdd from 'app/containers/modalAdd';
 import ModalBook from 'app/containers/modalBook';
+import Library from 'app/Library';
 
 import AddCard from 'app/components/addCard';
 

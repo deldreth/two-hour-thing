@@ -10,12 +10,12 @@ export interface BookState {
   open?: string;
 }
 
-const defaults: BookState = {
+export const defaults: BookState = {
   books: [],
   open: null,
 };
 
-const bookQuery = gql`
+export const BOOK_QUERY = gql`
   query GetBooks {
     books @client {
       id
@@ -26,7 +26,7 @@ const bookQuery = gql`
   }
 `;
 
-const openBookQuery = gql`
+export const OPEN_BOOK_QUERY = gql`
   query OpenBook {
     open @client
   }
@@ -35,12 +35,14 @@ const openBookQuery = gql`
 export const GET_OPEN_BOOK_QUERY = gql`
   query GetOpenBook($id: ID!) {
     book(id: $id) @client {
-      id,
-      title,
-      author,
-      image,
-      reviews,
-      description,
+      id
+      title
+      author
+      image
+      reviews {
+        id
+      }
+      description
       checked_out
     }
   }
@@ -56,9 +58,15 @@ function book ( _, { id }, { cache } ) {
         author
         image
         description
-        reviews
+        reviews {
+          id
+        }
         checked_out
       }
     `,
   } );
 }
+
+export default {
+  book,
+};
