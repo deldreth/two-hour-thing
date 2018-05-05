@@ -1,0 +1,12 @@
+query GetBooks {
+  books @client {
+    id
+    title
+    author
+    image
+  }
+}
+
+query OpenBook {
+  open @client
+}

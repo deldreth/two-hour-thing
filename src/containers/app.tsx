@@ -13,8 +13,9 @@ import Icon from 'material-ui/Icon';
 import Modal from 'material-ui/Modal';
 import { createMuiTheme, MuiThemeProvider } from 'material-ui/styles';
 
+import Book from 'app/components/Book';
 import Header from 'app/components/layout/header';
-import Books from 'app/containers/books';
+import Library from 'app/components/Library';
 import ModalAdd from 'app/containers/modalAdd';
 import ModalBook from 'app/containers/modalBook';
 
@@ -32,18 +33,13 @@ function App () {
           <Header />
 
           <RouteContainer>
-            <Router>
-              <Switch>
-                <Route exact path="/" component={ Books }/>
-                <Route path="/book/:bookId">
-                  <div>Books!</div>
-                </Route>
-              </Switch>
-            </Router>
+            <Switch>
+              <Route exact path="/" component={ Library }/>
+              <Route path="/book/:bookId" component={ Book }/>
+            </Switch>
           </RouteContainer>
 
-          <ModalBook />
-
+          <ModalBook/>
           <AddCard />
         </AppContainer>
       </ThemeProvider>

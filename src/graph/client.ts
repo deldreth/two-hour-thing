@@ -11,14 +11,14 @@ const cache = new InMemoryCache();
 const stateLink = withClientState( {
   cache,
   defaults: {
-    ...BookStore.store.defaults,
+    ...BookStore.defaults,
   },
   resolvers: {
     Query: {
-      ...BookStore.store.query,
+      ...BookStore.query,
     },
     Mutation: {
-      ...BookStore.store.mutations,
+      ...BookStore.mutations,
     },
   },
 } );
