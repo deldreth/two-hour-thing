@@ -3,17 +3,8 @@ import gql from 'graphql-tag';
 import { ChildProps, graphql } from 'react-apollo';
 import compose from 'recompose/compose';
 
-import { Book } from 'app/types';
-
-export interface BookState {
-  books: Book[];
-  open?: string;
-}
-
-export const defaults: BookState = {
-  books: [],
-  open: null,
-};
+import { GetOpenBookQueryVariables } from 'app/graph/types';
+import { Book, StateCache } from 'app/types';
 
 export const BOOK_QUERY = gql`
   query GetBooks {
@@ -48,9 +39,9 @@ export const GET_OPEN_BOOK_QUERY = gql`
   }
 `;
 
-function book ( _, { id }, { cache } ) {
+function book ( _: {}, vars: GetOpenBookQueryVariables, { cache }: StateCache ) {
   return cache.readFragment( {
-    id: `Book:${id}`,
+    id: `Book:${vars.id}`,
     fragment: gql`
       fragment openBook on Book {
         id

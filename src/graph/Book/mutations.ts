@@ -1,10 +1,11 @@
 import api from 'books-mock-api';
 import gql from 'graphql-tag';
 
-import { BOOK_QUERY, OPEN_BOOK_QUERY } from 'app/components/Book/queries';
-import { Book } from 'app/types';
+import { BOOK_QUERY, OPEN_BOOK_QUERY } from 'app/graph/Book/queries';
+import { toggleBookMutationVariables } from 'app/graph/types';
+import { Book, StateCache } from 'app/types';
 
-const initBookMutation = gql`
+export const initBookMutation = gql`
   mutation initBooks {
     initBooks @client {
       id
@@ -18,7 +19,7 @@ const initBookMutation = gql`
 //   }
 // `;
 
-const toggleBookMutation = gql`
+export const toggleBookMutation = gql`
   mutation toggleBook($id: ID!) {
     toggleBook(id: $id) @client {
       id
@@ -26,7 +27,7 @@ const toggleBookMutation = gql`
   }
 `;
 
-function initBooks ( _obj: {}, variables: {}, { cache }: any ): Promise<Book[]> {
+function initBooks ( _obj: {}, vars: any, { cache }: StateCache ): Promise<Book[]> {
   return api.getBooks().then( books => {
     const nextBooks = books.map( bookToType => ( {
       ...bookToType,
@@ -42,21 +43,21 @@ function initBooks ( _obj: {}, variables: {}, { cache }: any ): Promise<Book[]> 
   } );
 }
 
-function addBook ( _obj, { data }, { cache } ) {
-  const { books } = cache.readQuery( { BOOK_QUERY } );
+// function addBook ( _obj: {}, { data }, { cache } ) {
+//   const { books } = cache.readQuery( { BOOK_QUERY } );
 
-  const nextBooks = books.push( data );
+//   const nextBooks = books.push( data );
 
-  cache.writeQuery( {
-    BOOK_QUERY,
-    data: { books: nextBooks },
-  } );
-}
+//   cache.writeQuery( {
+//     BOOK_QUERY,
+//     data: { books: nextBooks },
+//   } );
+// }
 
-function toggleBook ( _obj, { id }, { cache } ): string | null {
+function toggleBook ( _obj: {}, vars: toggleBookMutationVariables, { cache }: StateCache ): string | null {
   const { open } = cache.readQuery( { query: OPEN_BOOK_QUERY } );
 
-  const openBook = ( open ) ? null : id;
+  const openBook = ( open ) ? null : vars.id;
   cache.writeData( {
     data: { open: openBook },
   } );
@@ -66,6 +67,6 @@ function toggleBook ( _obj, { id }, { cache } ): string | null {
 
 export default {
   initBooks,
-  addBook,
+  // addBook,
   toggleBook,
 };

@@ -15,11 +15,7 @@ import { createMuiTheme, MuiThemeProvider } from 'material-ui/styles';
 
 import Book from 'app/Book';
 import Header from 'app/components/layout/header';
-import ModalAdd from 'app/containers/modalAdd';
-import ModalBook from 'app/containers/modalBook';
 import Library from 'app/Library';
-
-import AddCard from 'app/components/addCard';
 
 const theme = createMuiTheme();
 
@@ -39,8 +35,6 @@ function App () {
             </Switch>
           </RouteContainer>
 
-          <ModalBook/>
-          <AddCard />
         </AppContainer>
       </ThemeProvider>
     </MuiThemeProvider>

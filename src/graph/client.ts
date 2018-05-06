@@ -4,21 +4,21 @@ import { withClientState } from 'apollo-link-state';
 
 import gql from 'graphql-tag';
 
-import BookStore from 'app/graph/stores/bookStore';
+import BookGraph from 'app/graph/Book';
 
 const cache = new InMemoryCache();
 
 const stateLink = withClientState( {
   cache,
   defaults: {
-    ...BookStore.defaults,
+    ...BookGraph.defaults,
   },
   resolvers: {
     Query: {
-      ...BookStore.query,
+      ...BookGraph.queries,
     },
     Mutation: {
-      ...BookStore.mutations,
+      ...BookGraph.mutations,
     },
   },
 } );

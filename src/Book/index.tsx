@@ -1,19 +1,23 @@
 import React from 'react';
-import { Query } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import compose from 'recompose/compose';
 import styled from 'styled-components';
 
 import Card, { CardMedia } from 'material-ui/Card';
 
+import { toggleBookMutation } from 'app/graph/Book/mutations';
+import { OPEN_BOOK_QUERY } from 'app/graph/Book/queries';
+import { OpenBookQuery } from 'app/graph/types';
 import { Book as BookType } from 'app/types';
 
 interface ExternalProps {
+  book: BookType;
 }
 
 export interface InjectedProps {
-  book: BookType;
-  onClick: ( data: any ) => void;
+  open?: string;
+  toggleBookMutation: ( {}: any ) => void;
 }
 
 type Props = ExternalProps & InjectedProps & RouteComponentProps<any>;
@@ -28,10 +32,10 @@ function ExpandedBook ( expanded: boolean, book: BookType ) {
   }
 }
 
-function Book ( { book, onClick, history, match }: Props ) {
+function Book ( { book, toggleBookMutation, history, match }: Props ) {
   return (
     <StyledCard 
-      onClick={ () => onClick( { variables: { id: book.id } } ) }>
+      onClick={ () => toggleBookMutation( { variables: { id: book.id } } ) }>
       {/* <StyledMedia
         image={ book.image }
         title={ book.title }/> */}
@@ -57,6 +61,13 @@ const StyledMedia = styled( CardMedia )`
   height: 100%;
 `;
 
-export default compose<{}, InjectedProps>(
+export default compose<InjectedProps, ExternalProps>(
   withRouter,
+  graphql<{}, OpenBookQuery, {}, {}>( OPEN_BOOK_QUERY, {
+    props: ( { ownProps, data } ) => ( {
+      ...ownProps,
+      open: data.open,
+    } ),
+  } ),
+  graphql( toggleBookMutation, { name: 'toggleBookMutation' } ),
 )( Book );

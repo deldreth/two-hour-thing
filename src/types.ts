@@ -22,3 +22,8 @@ export interface Book {
   reviews: Review[];
   description: string;
 }
+
+import { InMemoryCache } from 'apollo-cache-inmemory';
+export interface StateCache {
+  cache: InMemoryCache;
+}
