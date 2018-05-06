@@ -13,6 +13,7 @@ import Book from 'app/Book';
 import { initBookMutation } from 'app/graph/Book/mutations';
 import { BOOK_QUERY } from 'app/graph/Book/queries';
 import { GetBooksQuery } from 'app/graph/types';
+import withQuery from 'app/graph/withQuery';
 import { Book as BookType } from 'app/types';
 
 interface ExternalProps {
@@ -27,7 +28,6 @@ export interface InjectedProps {
 type Props = ExternalProps & InjectedProps;
 
 function Books ( props: Props ) {
-  console.log( props );
   return (
     <Grid container spacing={ 16 }>
       {
@@ -43,12 +43,7 @@ function Books ( props: Props ) {
 }
 
 export default compose<InjectedProps, ExternalProps>(
-  graphql <{}, GetBooksQuery, {}, {}>( BOOK_QUERY, {
-    props: ( { ownProps, data } ) => ( {
-      ...ownProps,
-      ...data,
-    } ),
-  } ),
+  withQuery( BOOK_QUERY ),
   graphql( initBookMutation, { name: 'initBookMutation' } ),
   lifecycle<Props, {}>( {
     componentDidMount () {

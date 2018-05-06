@@ -9,6 +9,7 @@ import Card, { CardMedia } from 'material-ui/Card';
 import { toggleBookMutation } from 'app/graph/Book/mutations';
 import { OPEN_BOOK_QUERY } from 'app/graph/Book/queries';
 import { OpenBookQuery } from 'app/graph/types';
+import withQuery from 'app/graph/withQuery';
 import { Book as BookType } from 'app/types';
 
 interface ExternalProps {
@@ -63,11 +64,6 @@ const StyledMedia = styled( CardMedia )`
 
 export default compose<InjectedProps, ExternalProps>(
   withRouter,
-  graphql<{}, OpenBookQuery, {}, {}>( OPEN_BOOK_QUERY, {
-    props: ( { ownProps, data } ) => ( {
-      ...ownProps,
-      open: data.open,
-    } ),
-  } ),
+  withQuery( OPEN_BOOK_QUERY ),
   graphql( toggleBookMutation, { name: 'toggleBookMutation' } ),
 )( Book );

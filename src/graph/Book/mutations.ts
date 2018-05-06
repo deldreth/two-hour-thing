@@ -56,10 +56,12 @@ function initBooks ( _obj: {}, vars: any, { cache }: StateCache ): Promise<Book[
 
 function toggleBook ( _obj: {}, vars: toggleBookMutationVariables, { cache }: StateCache ): string | null {
   const { open } = cache.readQuery( { query: OPEN_BOOK_QUERY } );
-
+  
   const openBook = ( open ) ? null : vars.id;
   cache.writeData( {
-    data: { open: openBook },
+    data: {
+      open: openBook,
+    },
   } );
 
   return openBook;
