@@ -64,7 +64,7 @@ function toggleBook ( _obj: {}, vars: toggleBookMutationVariables, { cache }: St
     },
   } );
 
-  return openBook;
+  return null;
 }
 
 export default {

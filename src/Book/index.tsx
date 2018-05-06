@@ -32,7 +32,7 @@ function ExpandedBook ( expanded: boolean, book: BookType ) {
   }
 }
 
-function Book ( { book, toggleBookMutation, history, match }: Props ) {
+function Book ( { book, open, toggleBookMutation, history, match }: Props ) {
   return (
     <StyledCard 
       onClick={ () => toggleBookMutation( { variables: { id: book.id } } ) }>
