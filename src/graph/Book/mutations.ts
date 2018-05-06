@@ -5,7 +5,7 @@ import { BOOK_QUERY, OPEN_BOOK_QUERY } from 'app/graph/Book/queries';
 import { toggleBookMutationVariables } from 'app/graph/types';
 import { Book, StateCache } from 'app/types';
 
-export const initBookMutation = gql`
+export const INIT_BOOKS_MUTATION = gql`
   mutation initBooks {
     initBooks @client {
       id
@@ -19,7 +19,7 @@ export const initBookMutation = gql`
 //   }
 // `;
 
-export const toggleBookMutation = gql`
+export const TOGGLE_BOOK_MUTATION = gql`
   mutation toggleBook($id: ID!) {
     toggleBook(id: $id) @client {
       id

@@ -10,9 +10,10 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 
 import Book from 'app/Book';
-import { initBookMutation } from 'app/graph/Book/mutations';
+import { INIT_BOOKS_MUTATION } from 'app/graph/Book/mutations';
 import { BOOK_QUERY } from 'app/graph/Book/queries';
 import { GetBooksQuery } from 'app/graph/types';
+import withMutation from 'app/graph/withMutation';
 import withQuery from 'app/graph/withQuery';
 import { Book as BookType } from 'app/types';
 
@@ -44,7 +45,7 @@ function Books ( props: Props ) {
 
 export default compose<InjectedProps, ExternalProps>(
   withQuery( BOOK_QUERY ),
-  graphql( initBookMutation, { name: 'initBookMutation' } ),
+  withMutation( INIT_BOOKS_MUTATION, 'initBookMutation' ),
   lifecycle<Props, {}>( {
     componentDidMount () {
       this.props.initBookMutation();
