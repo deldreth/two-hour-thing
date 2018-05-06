@@ -39,7 +39,7 @@ function initBooks ( _obj: {}, vars: any, { cache }: StateCache ): Promise<Book[
       data: { books: nextBooks },
     } );
 
-    return null;
+    return nextBooks;
   } );
 }
 
@@ -69,6 +69,5 @@ function toggleBook ( _obj: {}, vars: toggleBookMutationVariables, { cache }: St
 
 export default {
   initBooks,
-  // addBook,
   toggleBook,
 };

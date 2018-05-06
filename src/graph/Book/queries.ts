@@ -40,7 +40,6 @@ export const GET_OPEN_BOOK_QUERY = gql`
 `;
 
 function book ( _: {}, vars: GetOpenBookQueryVariables, { cache }: StateCache ) {
-  console.log( 'call book' );
   return cache.readFragment( {
     id: `Book:${vars.id}`,
     fragment: gql`
