@@ -29,10 +29,8 @@ function App () {
           <Header />
 
           <RouteContainer>
-            <Switch>
-              <Route exact path="/" component={ Library }/>
-              <Route path="/book/:bookId" component={ Book }/>
-            </Switch>
+            <Route exact path="/" component={ Library }/>
+            <Route path="/book/:bookId" component={ Book }/>
           </RouteContainer>
 
         </AppContainer>

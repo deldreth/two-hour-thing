@@ -1,13 +1,14 @@
 import React from 'react';
+import { Query, QueryResult } from 'react-apollo';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import compose from 'recompose/compose';
+import withHandlers from 'recompose/withHandlers';
 import styled from 'styled-components';
 
 import Card, { CardMedia } from 'material-ui/Card';
 
 import { TOGGLE_BOOK_MUTATION } from 'app/graph/Book/mutations';
-import { OPEN_BOOK_QUERY } from 'app/graph/Book/queries';
-import withMutation from 'app/graph/withMutation';
+import { GET_OPEN_BOOK_QUERY } from 'app/graph/Book/queries';
 import withQuery from 'app/graph/withQuery';
 import { Book as BookType } from 'app/types';
 
@@ -18,31 +19,42 @@ interface ExternalProps {
 export interface InjectedProps {
   open?: string;
   toggleBookMutation: ( { variables: { id: string } }: any ) => void;
+  onOpen: ( event: React.SyntheticEvent<HTMLDivElement> ) => void;
 }
 
 type Props = ExternalProps & InjectedProps & RouteComponentProps<any>;
 
-function ExpandedBook ( expanded: boolean, book: BookType ) {
-  if ( expanded ) {
-    return (
-      <div>
-        { book.description }
-      </div>
-    );
+function ExpandedBook ( { loading, error, data: { book } }: QueryResult ) {
+  if ( loading ) {
+    return <div>Loading</div>;
   }
+
+  if ( error ) {
+    return <div>Error</div>;
+  }
+
+  return (
+    <div>{ book.title }</div>
+  );
 }
 
-function Book ( { book, open, toggleBookMutation, history, match }: Props ) {
+function Book ( { book, open, onOpen, history, match }: Props ) {
+  if ( match.params.bookId ) {
+    return (
+      <Query query={ GET_OPEN_BOOK_QUERY } variables={ { id: match.params.bookId } }>
+        { result => ExpandedBook( result ) }
+      </Query>
+    );
+  }
+
   return (
     <StyledCard 
-      onClick={ () => toggleBookMutation( { variables: { id: book.id } } ) }>
+      onClick={ onOpen }>
       {/* <StyledMedia
         image={ book.image }
         title={ book.title }/> */}
       { book.title }<br/>
       { book.author }
-
-      { ExpandedBook( match.params.bookId === book.id, book ) }
     </StyledCard>
   );
 }
@@ -64,6 +76,9 @@ const StyledMedia = styled( CardMedia )`
 
 export default compose<InjectedProps, ExternalProps>(
   withRouter,
-  withQuery( OPEN_BOOK_QUERY ),
-  withMutation( TOGGLE_BOOK_MUTATION, 'toggleBookMutation' ),
+  withHandlers( {
+    onOpen: ( { book, history }: Props ) =>
+      ( event: React.SyntheticEvent<HTMLDivElement> ) =>
+        history.push( `/book/${book.id}` ),
+  } ),
 )( Book );
