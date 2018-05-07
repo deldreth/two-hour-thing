@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-serve --port 8000",
     "lint": "tslint --project . ",
-    "gen-types": "apollo-codegen introspect-schema src/schema.graphql --output src/schema.json && apollo-codegen generate src/**/*.ts --schema src/schema.json --target typescript --output src/graph/types.ts"
+    "gen-types": "apollo-codegen introspect-schema src/schema.graphql --output src/schema.json && apollo-codegen generate ./src/graph/**/*.ts --schema src/schema.json --target typescript --output src/graph/types.ts"
   },
   "devDependencies": {
     "@types/react": "^16.3.12",
