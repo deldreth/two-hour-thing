@@ -19,3 +19,7 @@ yarn start
 ```
 
 Navigate to `http://localhost:8000`.
+
+# Schema generation
+
+The app uses apollo-codegen to generate types from schema and queries. These aren't updated automatically but can be rebuilt with `yarn gen-types`. The command will build a json schema from schema.graph and then traverse the `src` directory for any gql tags.
