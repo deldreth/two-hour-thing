@@ -1,8 +1,8 @@
 # Local state management with Apollo
 
-What was a simple interview test quickly became a study in local state management with Apollo. Originally this application consisteted of very simple routes and a few basic state updates. Out of personal necessity to play and understand GraphQL/Apollo I decided to focus state management there.
+What was a simple interview test quickly became a study in local state management with Apollo. Originally this application consisteted of very simple routes and a few basic state updates. Out of personal necessity to  understand GraphQL/Apollo I decided to focus state management there.
 
-Apollo's only deals with client state in this application. There's no actual graphql service that it is connecting to (hence all the `@client` queries). 
+Apollo only deals with client state in this application. There's no actual graphql service that it is connecting to (hence all the `@client` queries). 
 
 There are a handful of HOCs that wrap react-apollo's graphql function to provide some quick recomposable queries and mutations.
 
